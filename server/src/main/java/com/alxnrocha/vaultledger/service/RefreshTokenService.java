@@ -1,5 +1,6 @@
 package com.alxnrocha.vaultledger.service;
 
+import com.alxnrocha.vaultledger.dto.TokenPair;
 import com.alxnrocha.vaultledger.entity.RefreshTokenEntity;
 import com.alxnrocha.vaultledger.entity.UserEntity;
 import com.alxnrocha.vaultledger.exception.SecurityAnomalyException;
@@ -152,6 +153,4 @@ public class RefreshTokenService {
             throw new IllegalStateException("SHA-256 not supported", e);
         }
     }
-
-    public record TokenPair(String accessToken, String refreshToken, UUID familyId, Instant expiresAt) {}
 }
