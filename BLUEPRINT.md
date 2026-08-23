@@ -200,19 +200,37 @@ erDiagram
 
 ---
 
-## 5. Roteiro de Execução (Milestones & Issues)
+## 5. Roteiro de Execução (6 Milestones & 21 Issues Granulares)
 
-| Issue | Tipo & Área | Título da Issue | Escopo & Entregáveis |
-|:---:|:---|:---|:---|
-| **#1** | `type:feat` `area:infra` | Core Scaffold & Multi-Module Architecture | Maven Java 21 + Spring Boot 3.3, Docker Compose (PostgreSQL 17 + Redis 7), Client React 19 + Tailwind v4 + Vite. |
-| **#2** | `type:feat` `area:database` | Relational Database Schema & Flyway Migrations | V1 DDL (`users`, `accounts`, `transactions`, `ledger_entries`, `audit_logs`) e V2 Seeds com plano de contas real. |
-| **#3** | `type:feat` `area:security` | Spring Security 6, RSA-256 JWT & RBAC Engine | Stateless JWT RSA-256, Refresh Token rotation no Redis com detecção de reuso, RBAC com 4 papéis estruturados. |
-| **#4** | `type:feat` `area:backend` | Double-Entry Ledger Engine & Atomic Transaction Service | Motor de partidas dobradas com validação $\sum D = \sum C$, isolamento de concorrência e lançamentos atômicos. |
-| **#5** | `type:feat` `area:security` | Tamper-Evident SHA-256 Forensic Audit Trail | Gravação imutável de logs de auditoria com hash encadeado e verificação de integridade da cadeia forense. |
-| **#6** | `type:feat` `area:ui` | Dark Fintech Design System, Layout & Role Switcher | Interface executiva dark fintech (Stripe/Brex), Sidebar, Header com status de segurança e seletor RBAC interativo. |
-| **#7** | `type:feat` `area:ui` | Chart of Accounts & Real-Time Ledger Explorer | TanStack Table para exploração do Livro Razão, filtros por natureza contábil, busca instantânea e badges de débito/crédito. |
-| **#8** | `type:feat` `area:ui` | Atomic Transfer Terminal & Double-Entry Modal | Terminal de transferência financeira com prévia contábil das partidas dobradas antes de submeter e validação com Zod. |
-| **#9** | `type:feat` `area:ui` | Forensic Audit Log Inspector & RBAC Matrix Viewer | Inspetor de trilha de auditoria com validação de hash SHA-256 em tempo real, visualizador de diff JSON e matriz de permissões. |
-| **#10** | `type:feat` `area:ui` | Financial Analytics & Solvency Dashboard | Painel de KPIs contábeis, gráfico de Balanço Patrimonial (Ativo vs Passivo) e fluxo de liquidez com Recharts. |
-| **#11** | `type:test` `area:qa` | Automated Testing Suite (JUnit 5, Testcontainers & Vitest) | Testes unitários do motor de partidas dobradas, testes de segurança RBAC e suíte Vitest no client. |
-| **#12** | `type:ci` `area:devops` | CI/CD Pipeline, Professional Docs & GitHub Pages Deploy | GitHub Actions, build automatizado, documentação oficial executiva em espanhol e deploy público no GitHub Pages. |
+### 🔹 Milestone 1: Setup do Monorepo, Dados & Entidades JPA
+- **#1:** `Core Scaffold & Multi-Module Architecture` *(Java 21, Spring Boot 3.3, React 19, Docker Compose)* — **[Concluído]**
+- **#2:** `Relational Database Schema & Flyway Migrations` *(DDL V1 + Seeds V2 com Plano de Contas)*
+- **#3:** `JPA Entities, Enums de Natureza Contábil & Repositórios com Pessimistic Lock`
+
+### 🔹 Milestone 2: Spring Security 6, Criptografia RSA & Redis
+- **#4:** `Infraestrutura de Chaves RSA-256 & Serviço JWT Stateless`
+- **#5:** `Rotação de Refresh Token no Redis com Detecção de Reuso e Blacklist`
+- **#6:** `Security Filter Chain do Spring Security 6 & Avaliador de Matriz RBAC`
+- **#7:** `Auth REST API (/login, /refresh, /me, /logout) & DTOs Jakarta`
+
+### 🔹 Milestone 3: Motor Contábil Double-Entry & Trilha Forense SHA-256
+- **#8:** `Serviço do Plano de Contas (Chart of Accounts) & Saldos por Natureza`
+- **#9:** `Motor de Partidas Dobradas (ΣD = ΣC) com Isolamento SERIALIZABLE`
+- **#10:** `Mecanismo de Estorno Contábil & Cálculo de Índices de Solvência`
+- **#11:** `Serviço de Auditoria Forense Imutável com Hash SHA-256 Encadeado`
+- **#12:** `REST Controllers (Ledger, Audit, Metrics) & OpenAPI Swagger Docs`
+
+### 🔹 Milestone 4: Design System Dark Fintech & Estado Reativo
+- **#14:** `Dark Fintech Design System (Tailwind v4), Shell de Navegação & Seletor RBAC`
+- **#15:** `Mock Engine Standalone & Camada de API Client Tipada (para GitHub Pages)`
+
+### 🔹 Milestone 5: Módulos de Interface React 19 (TanStack Table & Recharts)
+- **#16:** `Árvore do Plano de Contas & Cards de Saldo por Natureza Contábil`
+- **#17:** `Explorador do Livro Razão em Tempo Real com TanStack Table v8`
+- **#18:** `Terminal de Transferência Atômica com Preview Contábil & Validação Zod`
+- **#19:** `Inspetor da Trilha de Auditoria Forense & Verificador Criptográfico SHA-256`
+- **#20:** `Dashboard Analítico & Gráficos de Solvência / Liquidez com Recharts`
+
+### 🔹 Milestone 6: QA Automatizado, CI/CD & Deploy
+- **#21:** `Suíte de Testes Automatizados (JUnit 5 + Mockito + Testcontainers + Vitest)`
+- **#22:** `GitHub Actions CI/CD Pipeline, Documentação Executiva e Deploy no GitHub Pages`
