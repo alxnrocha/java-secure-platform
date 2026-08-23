@@ -96,7 +96,7 @@ public class LedgerEngineService {
         }
 
         // 3. Create Transaction Entity
-        String refNumber = generateReferenceNumber();
+        String refNumber = generateReferenceNumber("TX");
         String currency = (dto.currency() != null && !dto.currency().isBlank()) ? dto.currency() : "EUR";
         TransactionEntity transaction = new TransactionEntity(refNumber, dto.description(), totalDebits, currency, currentUser);
 
@@ -130,6 +130,71 @@ public class LedgerEngineService {
         return mapToDTO(saved);
     }
 
+    /**
+     * Executes an accounting reversal of an existing posted transaction.
+     * Inverts all debit and credit movements, updates original status to REVERSED, and records the reversal transaction.
+     */
+    @Transactional(isolation = Isolation.SERIALIZABLE)
+    public TransactionDTO reverseTransaction(UUID originalTransactionId, String reason, UserEntity operator) {
+        TransactionEntity original = transactionRepository.findById(originalTransactionId)
+                .orElseThrow(() -> new IllegalArgumentException("Original transaction not found with ID: " + originalTransactionId));
+
+        if (original.getStatus() != TransactionStatus.POSTED) {
+            throw new IllegalStateException("Only POSTED transactions can be reversed. Current status: " + original.getStatus());
+        }
+
+        // Mark original as REVERSED
+        original.setStatus(TransactionStatus.REVERSED);
+        transactionRepository.save(original);
+
+        // Deterministically lock all involved accounts
+        Set<String> uniqueCodes = new TreeSet<>();
+        for (LedgerEntryEntity entry : original.getLedgerEntries()) {
+            uniqueCodes.add(entry.getAccount().getCode());
+        }
+
+        Map<String, AccountEntity> lockedAccounts = new HashMap<>();
+        for (String code : uniqueCodes) {
+            AccountEntity account = accountRepository.findByCodeWithLock(code)
+                    .orElseThrow(() -> new IllegalArgumentException("Account with code " + code + " does not exist"));
+            lockedAccounts.put(code, account);
+        }
+
+        // Create Reversal Transaction
+        String refNumber = generateReferenceNumber("TX-REV");
+        String desc = "Reversal of " + original.getReferenceNumber() + ": " + reason;
+        TransactionEntity reversal = new TransactionEntity(refNumber, desc, original.getTotalAmount(), original.getCurrency(), operator);
+        reversal.setReversalOf(original);
+
+        // Invert entries: DEBIT -> CREDIT, CREDIT -> DEBIT
+        for (LedgerEntryEntity origEntry : original.getLedgerEntries()) {
+            AccountEntity account = lockedAccounts.get(origEntry.getAccount().getCode());
+            EntryType invertedType = (origEntry.getEntryType() == EntryType.DEBIT) ? EntryType.CREDIT : EntryType.DEBIT;
+
+            if (invertedType == EntryType.DEBIT) {
+                account.debit(origEntry.getAmount());
+            } else {
+                account.credit(origEntry.getAmount());
+            }
+            accountRepository.save(account);
+
+            LedgerEntryEntity reversalEntry = new LedgerEntryEntity(
+                    reversal,
+                    account,
+                    invertedType,
+                    origEntry.getAmount(),
+                    account.getBalance(),
+                    "Reversal item for entry " + origEntry.getId()
+            );
+            reversal.addEntry(reversalEntry);
+        }
+
+        TransactionEntity savedReversal = transactionRepository.save(reversal);
+        log.info("Successfully executed accounting reversal: {} for original TX: {}", refNumber, original.getReferenceNumber());
+
+        return mapToDTO(savedReversal);
+    }
+
     @Transactional(readOnly = true)
     public TransactionDTO getTransactionById(UUID id) {
         return transactionRepository.findById(id)
@@ -158,10 +223,10 @@ public class LedgerEngineService {
                 .map(this::mapToDTO);
     }
 
-    private String generateReferenceNumber() {
+    private String generateReferenceNumber(String prefix) {
         String datePart = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd"));
         String randomPart = UUID.randomUUID().toString().substring(0, 8).toUpperCase();
-        return "TX-" + datePart + "-" + randomPart;
+        return prefix + "-" + datePart + "-" + randomPart;
     }
 
     public TransactionDTO mapToDTO(TransactionEntity entity) {
