@@ -32,10 +32,10 @@ public class AuditLogEntity {
     @Column(name = "ip_address", length = 45)
     private String ipAddress;
 
-    @Column(name = "payload_before", columnDefinition = "jsonb")
+    @Column(name = "payload_before", columnDefinition = "TEXT")
     private String payloadBefore;
 
-    @Column(name = "payload_after", columnDefinition = "jsonb")
+    @Column(name = "payload_after", columnDefinition = "TEXT")
     private String payloadAfter;
 
     @Column(name = "previous_hash", nullable = false, length = 64)
