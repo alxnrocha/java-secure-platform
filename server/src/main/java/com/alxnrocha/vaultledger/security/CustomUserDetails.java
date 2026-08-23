@@ -12,6 +12,7 @@ import java.util.UUID;
 
 public class CustomUserDetails implements UserDetails {
 
+    private final UserEntity user;
     private final UUID id;
     private final String username;
     private final String email;
@@ -22,6 +23,7 @@ public class CustomUserDetails implements UserDetails {
     private final Collection<? extends GrantedAuthority> authorities;
 
     public CustomUserDetails(UserEntity user) {
+        this.user = user;
         this.id = user.getId();
         this.username = user.getUsername();
         this.email = user.getEmail();
@@ -30,6 +32,10 @@ public class CustomUserDetails implements UserDetails {
         this.active = user.isActive();
         this.mfaEnabled = user.isMfaEnabled();
         this.authorities = Collections.singletonList(new SimpleGrantedAuthority(user.getRole().name()));
+    }
+
+    public UserEntity getUser() {
+        return user;
     }
 
     public UUID getId() {
