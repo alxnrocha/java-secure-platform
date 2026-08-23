@@ -16,7 +16,7 @@ import java.util.Map;
 public class SystemInfoController {
 
     @GetMapping("/health")
-    @Operation(summary = "System health & engine state", description = "Returns active platform metadata, version, and timestamp.")
+    @Operation(summary = "System health state", description = "Returns active platform metadata, version, and timestamp.")
     public ResponseEntity<Map<String, Object>> getHealth() {
         return ResponseEntity.ok(Map.of(
                 "status", "UP",
@@ -24,6 +24,19 @@ public class SystemInfoController {
                 "version", "1.0.0-SNAPSHOT",
                 "engine", "Double-Entry Ledger Engine",
                 "security", "Spring Security 6 (RSA-256 + RBAC)",
+                "timestamp", Instant.now().toString()
+        ));
+    }
+
+    @GetMapping("/info")
+    @Operation(summary = "System runtime metadata", description = "Returns platform configuration, active engine version, and operational status.")
+    public ResponseEntity<Map<String, Object>> getInfo() {
+        return ResponseEntity.ok(Map.of(
+                "status", "OPERATIONAL",
+                "service", "VaultLedger Core Platform",
+                "version", "1.0.0-SNAPSHOT",
+                "engine", "Double-Entry Engine v1",
+                "security", "Spring Security 6 (RSA-256 + Redis Token Rotation)",
                 "timestamp", Instant.now().toString()
         ));
     }
