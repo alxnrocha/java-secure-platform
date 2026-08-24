@@ -13,9 +13,9 @@ import {
 } from '../types';
 import { INITIAL_ACCOUNTS, INITIAL_TRANSACTIONS, INITIAL_AUDIT_LOGS, GENESIS_HASH } from './seedData';
 
-const STORAGE_KEY_ACCOUNTS = 'vaultledger_accounts';
-const STORAGE_KEY_TRANSACTIONS = 'vaultledger_transactions';
-const STORAGE_KEY_AUDIT = 'vaultledger_audit_logs';
+const STORAGE_KEY_ACCOUNTS = 'vaultledger_accounts_v2';
+const STORAGE_KEY_TRANSACTIONS = 'vaultledger_transactions_v2';
+const STORAGE_KEY_AUDIT = 'vaultledger_audit_logs_v2';
 
 async function sha256(message: string): Promise<string> {
   // If in browser Web Crypto environment
@@ -47,11 +47,11 @@ class MockDatabase {
 
       this.accounts = storedAcc ? JSON.parse(storedAcc) : [...INITIAL_ACCOUNTS];
       this.transactions = storedTx ? JSON.parse(storedTx) : [...INITIAL_TRANSACTIONS];
-      this.auditLogs = storedAudit ? JSON.parse(storedAudit) : [...INITIAL_AUDIT_LOGS];
+      this.auditLogs = storedAudit ? JSON.parse(storedAudit) : [...INITIAL_AUDIT_LOGS].reverse();
     } catch {
       this.accounts = [...INITIAL_ACCOUNTS];
       this.transactions = [...INITIAL_TRANSACTIONS];
-      this.auditLogs = [...INITIAL_AUDIT_LOGS];
+      this.auditLogs = [...INITIAL_AUDIT_LOGS].reverse();
     }
   }
 
@@ -68,7 +68,7 @@ class MockDatabase {
   public resetDatabase() {
     this.accounts = JSON.parse(JSON.stringify(INITIAL_ACCOUNTS));
     this.transactions = JSON.parse(JSON.stringify(INITIAL_TRANSACTIONS));
-    this.auditLogs = JSON.parse(JSON.stringify(INITIAL_AUDIT_LOGS));
+    this.auditLogs = JSON.parse(JSON.stringify(INITIAL_AUDIT_LOGS)).reverse();
     this.saveToStorage();
   }
 

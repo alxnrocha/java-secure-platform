@@ -59,8 +59,9 @@ export function TransactionStatusBadge({ status }: { status: TransactionStatus }
     );
   }
 
-  const map: Record<TransactionStatus, { variant: 'emerald' | 'rose' | 'amber' | 'slate'; label: string }> = {
+  const map: Record<TransactionStatus, { variant: 'emerald' | 'rose' | 'amber' | 'slate' | 'blue'; label: string }> = {
     POSTED: { variant: 'emerald', label: 'POSTED' },
+    AUDITED: { variant: 'blue', label: 'AUDITED' },
     REVERSED: { variant: 'rose', label: 'REVERSED' },
     PENDING: { variant: 'amber', label: 'PENDING' },
     REJECTED: { variant: 'slate', label: 'REJECTED' },

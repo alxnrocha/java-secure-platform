@@ -8,7 +8,7 @@ export type AccountType = 'ASSET' | 'LIABILITY' | 'EQUITY' | 'REVENUE' | 'EXPENS
 
 export type EntryType = 'DEBIT' | 'CREDIT';
 
-export type TransactionStatus = 'PENDING' | 'POSTED' | 'REVERSED' | 'REJECTED';
+export type TransactionStatus = 'PENDING' | 'POSTED' | 'REVERSED' | 'REJECTED' | 'AUDITED';
 
 export interface User {
   id: string;
