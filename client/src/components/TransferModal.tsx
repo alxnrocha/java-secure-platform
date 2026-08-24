@@ -15,7 +15,7 @@ import { apiClient } from '../api/apiClient';
 import { useAuthStore } from '../stores/authStore';
 
 const formatCurrency = (val: number) => {
-  return new Intl.NumberFormat('es-ES', {
+  return new Intl.NumberFormat('en-US', {
     style: 'currency',
     currency: 'EUR',
     minimumFractionDigits: 2,
@@ -85,11 +85,11 @@ export function TransferModal({ isOpen, onClose, onSuccess }: TransferModalProps
     e.preventDefault();
     if (step === 1) {
       if (parsedAmount <= 0) {
-        setError('El importe de la transferencia debe ser mayor a €0.00.');
+        setError('Transfer amount must be greater than €0.00.');
         return;
       }
       if (debitAccountCode === creditAccountCode) {
-        setError('La cuenta de débito y crédito deben ser distintas.');
+        setError('Source DEBIT and destination CREDIT accounts must be different.');
         return;
       }
       setError(null);
@@ -102,20 +102,20 @@ export function TransferModal({ isOpen, onClose, onSuccess }: TransferModalProps
     setError(null);
     try {
       const payload: CreateTransactionPayload = {
-        description: memo.trim() || `Transferencia ${refNumber}`,
+        description: memo.trim() || `Transfer ${refNumber}`,
         currency: 'EUR',
         entries: [
           {
             accountCode: debitAccountCode,
             entryType: 'DEBIT',
             amount: parsedAmount,
-            description: `Débito a ${debitAccount?.name}`,
+            description: `Debit to ${debitAccount?.name}`,
           },
           {
             accountCode: creditAccountCode,
             entryType: 'CREDIT',
             amount: parsedAmount,
-            description: `Crédito a ${creditAccount?.name}`,
+            description: `Credit to ${creditAccount?.name}`,
           },
         ],
       };
@@ -127,7 +127,7 @@ export function TransferModal({ isOpen, onClose, onSuccess }: TransferModalProps
         onClose();
       }, 1200);
     } catch (err: any) {
-      setError(err.message || 'Error al autorizar la transacción contable.');
+      setError(err.message || 'Error authorizing ledger transaction.');
       setStep(1);
     } finally {
       setLoading(false);
@@ -422,7 +422,7 @@ export function TransferModal({ isOpen, onClose, onSuccess }: TransferModalProps
                   disabled={loading}
                   className="px-4 py-2.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 text-xs font-semibold cursor-pointer"
                 >
-                  Atrás
+                  Back
                 </button>
               )}
 

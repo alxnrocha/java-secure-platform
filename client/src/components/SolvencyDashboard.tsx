@@ -25,7 +25,7 @@ import { useAuthStore } from '../stores/authStore';
 import { StatCard } from './StatCard';
 
 const formatCurrency = (val: number) => {
-  return new Intl.NumberFormat('es-ES', {
+  return new Intl.NumberFormat('en-US', {
     style: 'currency',
     currency: 'EUR',
     minimumFractionDigits: 2,

@@ -26,7 +26,7 @@ import { useAuthStore } from '../stores/authStore';
 import { TransactionStatusBadge } from './Badge';
 
 const formatCurrency = (val: number) => {
-  return new Intl.NumberFormat('es-ES', {
+  return new Intl.NumberFormat('en-US', {
     style: 'currency',
     currency: 'EUR',
     minimumFractionDigits: 2,
