@@ -1,154 +1,166 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { 
   ShieldCheck, 
-  Lock, 
-  Database, 
-  CheckCircle2, 
-  Clock, 
-  ChevronDown,
-  UserCheck,
-  Sparkles
+  Search, 
+  ChevronDown, 
+  Bell, 
+  Shield, 
+  KeyRound, 
+  UserCheck, 
+  FileSearch, 
+  RotateCcw
 } from 'lucide-react';
 import { useAuthStore } from '../stores/authStore';
 import { RoleType } from '../types';
-import { RoleBadge } from './Badge';
+import { apiClient } from '../api/apiClient';
 
-export function Header() {
-  const { currentUser, switchRole, isDemoMode } = useAuthStore();
-  const [time, setTime] = useState<string>('');
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+interface HeaderProps {
+  onSearchChange?: (query: string) => void;
+  onRefreshData?: () => void;
+}
 
-  useEffect(() => {
-    const update = () => {
-      const now = new Date();
-      setTime(now.toUTCString().replace('GMT', 'UTC'));
-    };
-    update();
-    const interval = setInterval(update, 1000);
-    return () => clearInterval(interval);
-  }, []);
+export function Header({ onSearchChange, onRefreshData }: HeaderProps) {
+  const { currentUser, switchRole } = useAuthStore();
+  const [roleDropdownOpen, setRoleDropdownOpen] = useState(false);
+  const [searchVal, setSearchVal] = useState('');
 
-  const roles: { role: RoleType; label: string; desc: string }[] = [
-    { role: 'ROLE_ADMIN', label: 'Administrador (Root)', desc: 'Acceso total, creación de cuentas y transferencias' },
-    { role: 'ROLE_OPERATOR', label: 'Operador de Tesorería', desc: 'Emisión de asientos contables y transferencias' },
-    { role: 'ROLE_AUDITOR', label: 'Auditor Forense', desc: 'Verificación criptográfica SHA-256 y lectura' },
-    { role: 'ROLE_COMPLIANCE_OFFICER', label: 'Oficial de Cumplimiento', desc: 'Ejecución de estornos contables y auditoría' },
+  const roles: { role: RoleType; label: string; icon: typeof UserCheck; desc: string }[] = [
+    { role: 'ROLE_ADMIN', label: 'Admin (Full Access)', icon: KeyRound, desc: 'Cuentas, transferencias, estornos y auditoría' },
+    { role: 'ROLE_OPERATOR', label: 'Operator (Ledger Entry)', icon: UserCheck, desc: 'Emisión de transferencias operacionales' },
+    { role: 'ROLE_AUDITOR', label: 'Auditor (Read-Only & Hash)', icon: FileSearch, desc: 'Inspección de asientos y verificación SHA-256' },
+    { role: 'ROLE_COMPLIANCE_OFFICER', label: 'Compliance (Approvals)', icon: Shield, desc: 'Estornos y supervisión regulatoria' },
   ];
 
+  const handleSelectRole = (r: RoleType) => {
+    switchRole(r);
+    setRoleDropdownOpen(false);
+  };
+
+  const handleResetData = () => {
+    apiClient.resetDatabase();
+    if (onRefreshData) onRefreshData();
+  };
+
+  const displayName = currentUser ? `${currentUser.firstName} ${currentUser.lastName}` : 'Michael Anderson';
+  const roleLabel = currentUser?.role === 'ROLE_ADMIN' 
+    ? 'ROLE: ADMIN / AUDITOR' 
+    : `ROLE: ${currentUser?.role.replace('ROLE_', '')}`;
+
   return (
-    <header className="border-b border-slate-800/80 bg-[#080C14]/95 backdrop-blur-md px-6 py-3 sticky top-0 z-50 flex items-center justify-between">
-      {/* Brand & Platform Identity */}
-      <div className="flex items-center gap-3">
-        <div className="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400 font-bold shadow-[0_0_20px_rgba(16,185,129,0.2)] transition-transform hover:scale-105">
-          <ShieldCheck className="w-6 h-6" />
-        </div>
-        <div>
-          <div className="flex items-center gap-2">
-            <span className="font-bold text-white tracking-tight text-lg bg-gradient-to-r from-white via-slate-100 to-slate-400 bg-clip-text text-transparent">
-              VaultLedger
-            </span>
-            <span className="text-[10px] uppercase font-mono px-2 py-0.5 rounded-full bg-emerald-950/80 text-emerald-400 border border-emerald-700/60 font-semibold flex items-center gap-1 shadow-[0_0_10px_rgba(16,185,129,0.15)]">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-              Core Engine v1.0
-            </span>
-            {isDemoMode && (
-              <span className="text-[10px] uppercase font-mono px-2 py-0.5 rounded-full bg-cyan-950/80 text-cyan-400 border border-cyan-700/60 font-semibold flex items-center gap-1">
-                <Sparkles className="w-3 h-3" />
-                Live Demo Engine
-              </span>
-            )}
+    <header className="h-16 bg-white border-b border-slate-200 sticky top-0 z-40 px-6 flex items-center justify-between shadow-xs">
+      {/* Left: Branding & Security Badge */}
+      <div className="flex items-center gap-4 min-w-0">
+        <div className="flex items-center gap-2.5">
+          <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-600 to-indigo-700 flex items-center justify-center text-white shadow-sm font-bold text-sm">
+            <Shield className="w-5 h-5 fill-white/20" />
           </div>
-          <p className="text-xs text-slate-400">
-            Plataforma Bancaria de Doble Partida con Criptografía Asimétrica RSA-256
-          </p>
+          <span className="text-lg font-bold tracking-tight text-slate-900 font-sans">
+            VaultLedger
+          </span>
+        </div>
+
+        {/* Security Indicator Pill matching 1.png */}
+        <div className="hidden sm:flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-semibold">
+          <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+          <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
+          <span>System Encrypted &bull; RSA-256</span>
         </div>
       </div>
 
-      {/* System Status Indicators & Live Clock */}
+      {/* Center: Global Search matching 1.png */}
+      <div className="hidden md:flex items-center max-w-md w-full mx-6">
+        <div className="relative w-full">
+          <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+          <input
+            type="text"
+            placeholder="Search accounts, transactions, entities..."
+            value={searchVal}
+            onChange={e => {
+              setSearchVal(e.target.value);
+              if (onSearchChange) onSearchChange(e.target.value);
+            }}
+            className="w-full bg-slate-50 border border-slate-200 hover:border-slate-300 focus:bg-white rounded-lg pl-10 pr-10 py-1.5 text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all"
+          />
+          <kbd className="absolute right-3 top-1/2 -translate-y-1/2 text-[10px] font-mono text-slate-400 bg-slate-200/80 px-1.5 py-0.5 rounded border border-slate-300">
+            ⌘ K
+          </kbd>
+        </div>
+      </div>
+
+      {/* Right: Reset Data, Role Switcher & User Profile */}
       <div className="flex items-center gap-3">
-        <div className="hidden lg:flex items-center gap-2 text-xs font-mono px-3 py-1.5 rounded-lg bg-slate-900/90 border border-slate-800 text-slate-300">
-          <Clock className="w-3.5 h-3.5 text-cyan-400" />
-          <span className="text-slate-200">{time || 'UTC Loading...'}</span>
+        {/* Reset Mock DB Button */}
+        <button
+          onClick={handleResetData}
+          title="Restablecer Datos Iniciales"
+          className="p-2 rounded-lg text-slate-500 hover:text-slate-900 hover:bg-slate-100 border border-transparent hover:border-slate-200 transition-colors"
+        >
+          <RotateCcw className="w-4 h-4" />
+        </button>
+
+        {/* Notification Bell with Badge 3 */}
+        <div className="relative">
+          <button className="p-2 rounded-lg text-slate-500 hover:text-slate-900 hover:bg-slate-100 transition-colors">
+            <Bell className="w-4 h-4" />
+          </button>
+          <span className="absolute top-1 right-1 w-4 h-4 rounded-full bg-rose-500 text-white text-[9px] font-bold flex items-center justify-center">
+            3
+          </span>
         </div>
 
-        <div className="hidden md:flex items-center gap-2 text-xs font-mono">
-          <div className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-slate-900/90 border border-slate-800 text-slate-300">
-            <Lock className="w-3.5 h-3.5 text-emerald-400" />
-            <span>RSA-256 JWT</span>
-          </div>
-          <div className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-slate-900/90 border border-slate-800 text-slate-300">
-            <Database className="w-3.5 h-3.5 text-cyan-400" />
-            <span>PostgreSQL 17</span>
-          </div>
-          <div className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-emerald-950/50 border border-emerald-800/60 text-emerald-300 shadow-[0_0_12px_rgba(16,185,129,0.1)]">
-            <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
-            <span className="font-semibold">ΣD = ΣC Invariante</span>
-          </div>
-        </div>
-
-        {/* Interactive RBAC Role Switcher */}
+        {/* Interactive RBAC Switcher Dropdown */}
         <div className="relative">
           <button
-            onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-            className="flex items-center gap-2.5 px-3 py-1.5 rounded-lg bg-slate-900 border border-slate-700/80 hover:border-emerald-500/50 transition-all text-left group"
+            onClick={() => setRoleDropdownOpen(!roleDropdownOpen)}
+            className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-50 hover:bg-slate-100 border border-slate-200 text-xs font-semibold text-slate-700 transition-colors"
           >
-            <div className="w-7 h-7 rounded-md bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold text-xs">
-              <UserCheck className="w-4 h-4" />
-            </div>
-            <div className="hidden sm:block text-xs">
-              <div className="text-white font-medium flex items-center gap-1.5">
-                <span>{currentUser.firstName} {currentUser.lastName}</span>
-                <ChevronDown className="w-3 h-3 text-slate-400 group-hover:text-white transition-transform" />
-              </div>
-              <RoleBadge role={currentUser.role} />
-            </div>
+            <span>
+              Role: {currentUser.role === 'ROLE_ADMIN' ? 'Admin / Auditor' : currentUser.role.replace('ROLE_', '')}
+            </span>
+            <ChevronDown className="w-3.5 h-3.5 text-slate-400" />
           </button>
 
-          {/* Role Dropdown */}
-          {isDropdownOpen && (
-            <div 
-              className="absolute right-0 mt-2 w-80 rounded-xl bg-[#0F172A] border border-slate-700 shadow-2xl p-2 z-50 animate-in fade-in zoom-in-95 duration-100"
-              onMouseLeave={() => setIsDropdownOpen(false)}
-            >
-              <div className="px-3 py-2 border-b border-slate-800 text-xs">
-                <span className="font-semibold text-white uppercase tracking-wider">Conmutador de Roles RBAC</span>
-                <p className="text-slate-400 text-[11px] mt-0.5">
-                  Cambia de identidad en tiempo real para verificar los permisos del sistema
-                </p>
+          {roleDropdownOpen && (
+            <div className="absolute right-0 mt-2 w-72 bg-white border border-slate-200 rounded-xl shadow-lg p-2 z-50 animate-in fade-in">
+              <div className="text-[10px] font-mono uppercase tracking-wider text-slate-400 px-3 py-1.5 border-b border-slate-100">
+                Seleccionar Rol Operacional (RBAC)
               </div>
-
-              <div className="py-1 space-y-1">
-                {roles.map(r => {
-                  const isSelected = currentUser.role === r.role;
-                  return (
-                    <button
-                      key={r.role}
-                      onClick={() => {
-                        switchRole(r.role);
-                        setIsDropdownOpen(false);
-                      }}
-                      className={`w-full text-left p-2.5 rounded-lg text-xs transition-all flex items-start gap-2.5 ${
-                        isSelected 
-                          ? 'bg-slate-800/90 border border-emerald-500/40 text-white' 
-                          : 'hover:bg-slate-800/50 text-slate-300'
-                      }`}
-                    >
-                      <div className="mt-0.5">
-                        <RoleBadge role={r.role} />
-                      </div>
-                      <div className="flex-1">
-                        <p className="font-medium text-white">{r.label}</p>
-                        <p className="text-[11px] text-slate-400 mt-0.5">{r.desc}</p>
-                      </div>
-                      {isSelected && (
-                        <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
-                      )}
-                    </button>
-                  );
-                })}
+              <div className="space-y-1 mt-1">
+                {roles.map(r => (
+                  <button
+                    key={r.role}
+                    onClick={() => handleSelectRole(r.role)}
+                    className={`w-full flex items-start gap-2.5 p-2 rounded-lg text-left text-xs transition-colors ${
+                      currentUser.role === r.role
+                        ? 'bg-blue-50 text-blue-900 border border-blue-200'
+                        : 'hover:bg-slate-50 text-slate-700'
+                    }`}
+                  >
+                    <r.icon className={`w-4 h-4 mt-0.5 shrink-0 ${currentUser.role === r.role ? 'text-blue-600' : 'text-slate-400'}`} />
+                    <div>
+                      <div className="font-semibold">{r.label}</div>
+                      <div className="text-[10px] text-slate-500 leading-tight">{r.desc}</div>
+                    </div>
+                  </button>
+                ))}
               </div>
             </div>
           )}
+        </div>
+
+        {/* User Profile Pill matching 1.png */}
+        <div className="flex items-center gap-2 pl-2 border-l border-slate-200">
+          <div className="w-8 h-8 rounded-full bg-slate-900 text-white font-semibold text-xs flex items-center justify-center overflow-hidden border border-slate-200">
+            {currentUser?.firstName?.charAt(0) || 'A'}
+          </div>
+          <div className="hidden lg:block text-left">
+            <div className="text-xs font-bold text-slate-900 leading-tight">
+              {displayName}
+            </div>
+            <div className="text-[10px] font-mono font-semibold text-blue-600 uppercase">
+              {roleLabel}
+            </div>
+          </div>
         </div>
       </div>
     </header>
