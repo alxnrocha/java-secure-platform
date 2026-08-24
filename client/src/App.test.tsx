@@ -6,17 +6,17 @@ describe('VaultLedger Core Client App', () => {
   it('renders brand title and security status badges', () => {
     render(<App />);
     expect(screen.getByText('VaultLedger')).toBeInTheDocument();
-    expect(screen.getByText(/Core Engine v1.0/i)).toBeInTheDocument();
-    expect(screen.getByText(/RSA-256 Auth/i)).toBeInTheDocument();
-    expect(screen.getAllByText(/PostgreSQL 17/i).length).toBeGreaterThan(0);
-    expect(screen.getByText(/Ledger Invariant ΣD = ΣC/i)).toBeInTheDocument();
+    expect(screen.getByText(/System Encrypted • RSA-256/i)).toBeInTheDocument();
+    expect(screen.getByText('Total Asset Liquidity')).toBeInTheDocument();
+    expect(screen.getByText('Total Liabilities')).toBeInTheDocument();
   });
 
-  it('renders navigation tabs correctly', () => {
+  it('renders navigation sidebar items correctly', () => {
     render(<App />);
-    expect(screen.getByText('Visión General')).toBeInTheDocument();
-    expect(screen.getByText('Libro Mayor (Double-Entry)')).toBeInTheDocument();
-    expect(screen.getByText('Pista de Auditoría SHA-256')).toBeInTheDocument();
-    expect(screen.getByText('Análisis de Solvencia')).toBeInTheDocument();
+    expect(screen.getByText('Dashboard')).toBeInTheDocument();
+    expect(screen.getByText('Transactions')).toBeInTheDocument();
+    expect(screen.getByText('Accounts')).toBeInTheDocument();
+    expect(screen.getByText('Audit Trail')).toBeInTheDocument();
+    expect(screen.getByText('Reports & Solvency')).toBeInTheDocument();
   });
 });

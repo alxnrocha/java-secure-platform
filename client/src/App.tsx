@@ -1,152 +1,235 @@
 import { useState } from 'react';
 import { 
-  ShieldCheck, 
-  Lock, 
-  Activity, 
-  Layers, 
-  RefreshCw, 
-  CheckCircle2,
-  Terminal,
-  Database
+  Landmark, 
+  Scale, 
+  DollarSign, 
+  TrendingUp, 
+  Plus, 
+  Users, 
+  CheckCircle2, 
+  Folder, 
+  Link2, 
+  Settings as SettingsIcon
 } from 'lucide-react';
+import { Header } from './components/Header';
+import { Sidebar, NavSection } from './components/Sidebar';
+import { StatCard } from './components/StatCard';
+import { ChartOfAccounts } from './components/ChartOfAccounts';
+import { TransactionLedger } from './components/TransactionLedger';
+import { AuditTrail } from './components/AuditTrail';
+import { SolvencyDashboard } from './components/SolvencyDashboard';
+import { TransferModal } from './components/TransferModal';
+import { useAuthStore } from './stores/authStore';
 
-export default function App() {
-  const [activeTab, setActiveTab] = useState<'overview' | 'ledger' | 'audit' | 'solvency'>('overview');
+export function App() {
+  const { canPostTransaction } = useAuthStore();
+  const [activeSection, setActiveSection] = useState<NavSection>('dashboard');
+  const [isTransferModalOpen, setIsTransferModalOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [refreshKey, setRefreshKey] = useState(0);
+
+  const triggerRefresh = () => {
+    setRefreshKey(prev => prev + 1);
+  };
 
   return (
-    <div className="min-h-screen bg-[#080C14] text-slate-100 flex flex-col">
-      {/* Top System Security Bar */}
-      <header className="border-b border-slate-800/80 bg-[#0B0F19]/90 backdrop-blur px-6 py-3.5 flex items-center justify-between sticky top-0 z-50">
-        <div className="flex items-center gap-3">
-          <div className="w-9 h-9 rounded-lg bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400 font-bold shadow-[0_0_15px_rgba(16,185,129,0.15)]">
-            <ShieldCheck className="w-5 h-5" />
-          </div>
-          <div>
-            <div className="flex items-center gap-2">
-              <span className="font-semibold text-white tracking-tight text-base">VaultLedger</span>
-              <span className="text-[10px] uppercase font-mono px-1.5 py-0.5 rounded bg-emerald-950/60 text-emerald-400 border border-emerald-800/50">
-                Core Engine v1.0
-              </span>
-            </div>
-            <p className="text-xs text-slate-400">Enterprise Double-Entry Financial Engine &amp; Security Platform</p>
-          </div>
-        </div>
+    <div className="min-h-screen bg-[#F8FAFC] text-slate-900 flex flex-col font-sans antialiased">
+      {/* Top Navigation Bar matching 1.png */}
+      <Header 
+        onSearchChange={setSearchQuery} 
+        onRefreshData={triggerRefresh}
+      />
 
-        {/* Security Status Indicators */}
-        <div className="flex items-center gap-4 text-xs font-mono">
-          <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-slate-900 border border-slate-800 text-slate-300">
-            <Lock className="w-3.5 h-3.5 text-emerald-400" />
-            <span>RSA-256 Auth</span>
-          </div>
-          <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-slate-900 border border-slate-800 text-slate-300">
-            <Database className="w-3.5 h-3.5 text-cyan-400" />
-            <span>PostgreSQL 17</span>
-          </div>
-          <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-emerald-950/40 border border-emerald-700/50 text-emerald-300">
-            <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
-            <span>Ledger Invariant ΣD = ΣC</span>
-          </div>
-        </div>
-      </header>
+      {/* Main Content Area with Sidebar */}
+      <div className="flex-1 flex overflow-hidden">
+        <Sidebar
+          activeSection={activeSection}
+          onSelectSection={setActiveSection}
+        />
 
-      {/* Main Scaffold View */}
-      <main className="flex-1 max-w-7xl w-full mx-auto p-6 space-y-6">
-        {/* Navigation Tabs */}
-        <div className="flex border-b border-slate-800 pb-2 gap-2 text-sm">
-          <button
-            onClick={() => setActiveTab('overview')}
-            className={`px-4 py-2 rounded-lg font-medium transition-all ${
-              activeTab === 'overview'
-                ? 'bg-slate-800 text-white border border-slate-700'
-                : 'text-slate-400 hover:text-slate-200'
-            }`}
-          >
-            Visión General
-          </button>
-          <button
-            onClick={() => setActiveTab('ledger')}
-            className={`px-4 py-2 rounded-lg font-medium transition-all ${
-              activeTab === 'ledger'
-                ? 'bg-slate-800 text-white border border-slate-700'
-                : 'text-slate-400 hover:text-slate-200'
-            }`}
-          >
-            Libro Mayor (Double-Entry)
-          </button>
-          <button
-            onClick={() => setActiveTab('audit')}
-            className={`px-4 py-2 rounded-lg font-medium transition-all ${
-              activeTab === 'audit'
-                ? 'bg-slate-800 text-white border border-slate-700'
-                : 'text-slate-400 hover:text-slate-200'
-            }`}
-          >
-            Pista de Auditoría SHA-256
-          </button>
-          <button
-            onClick={() => setActiveTab('solvency')}
-            className={`px-4 py-2 rounded-lg font-medium transition-all ${
-              activeTab === 'solvency'
-                ? 'bg-slate-800 text-white border border-slate-700'
-                : 'text-slate-400 hover:text-slate-200'
-            }`}
-          >
-            Análisis de Solvencia
-          </button>
-        </div>
-
-        {/* Scaffold Core Banner */}
-        <div className="glass-panel p-8 rounded-xl border border-slate-800/80 space-y-4">
-          <div className="flex items-center gap-3">
-            <div className="p-3 rounded-lg bg-cyan-500/10 border border-cyan-500/20 text-cyan-400">
-              <Terminal className="w-6 h-6" />
-            </div>
-            <div>
-              <h2 className="text-xl font-bold text-white tracking-tight">
-                Arquitectura Multi-Módulo Inicializada con Éxito
-              </h2>
-              <p className="text-sm text-slate-400">
-                Backend Spring Boot 3.3 (Java 21 LTS) y Frontend React 19 + Tailwind CSS v4 acoplados y listos.
-              </p>
-            </div>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-4 border-t border-slate-800/60 text-sm">
-            <div className="bg-slate-900/60 p-4 rounded-lg border border-slate-800">
-              <div className="flex items-center gap-2 text-emerald-400 font-semibold mb-1">
-                <Layers className="w-4 h-4" />
-                <span>Double-Entry Core</span>
+        <main className="flex-1 overflow-y-auto p-6 space-y-6">
+          {/* DASHBOARD VIEW matching 1.png */}
+          {activeSection === 'dashboard' && (
+            <div key={refreshKey} className="space-y-6">
+              {/* 4 KPI Metric Cards matching 1.png */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                <StatCard
+                  title="Total Asset Liquidity"
+                  value="€21,550,000.00"
+                  trend={{ value: '8.42%', positive: true }}
+                  icon={Landmark}
+                  accent="emerald"
+                />
+                <StatCard
+                  title="Total Liabilities"
+                  value="€9,400,000.00"
+                  trend={{ value: '4.13%', positive: true }}
+                  icon={Scale}
+                  accent="blue"
+                />
+                <StatCard
+                  title="Net Equity Balance"
+                  value="€11,800,000.00"
+                  trend={{ value: '10.27%', positive: true }}
+                  icon={DollarSign}
+                  accent="purple"
+                />
+                <StatCard
+                  title="Net Operating Income"
+                  value="€350,000.00"
+                  trend={{ value: '6.88%', positive: true }}
+                  icon={TrendingUp}
+                  accent="cyan"
+                />
               </div>
-              <p className="text-xs text-slate-400">
-                Partidas contables balanceadas con garantía matemática de conservación de balance.
-              </p>
-            </div>
-            <div className="bg-slate-900/60 p-4 rounded-lg border border-slate-800">
-              <div className="flex items-center gap-2 text-cyan-400 font-semibold mb-1">
-                <Activity className="w-4 h-4" />
-                <span>Seguridad RBAC</span>
-              </div>
-              <p className="text-xs text-slate-400">
-                Aislamiento estricto de roles: Admin, Operador, Auditor y Oficial de Cumplimiento.
-              </p>
-            </div>
-            <div className="bg-slate-900/60 p-4 rounded-lg border border-slate-800">
-              <div className="flex items-center gap-2 text-amber-400 font-semibold mb-1">
-                <RefreshCw className="w-4 h-4" />
-                <span>Auditoría Forense</span>
-              </div>
-              <p className="text-xs text-slate-400">
-                Cadena criptográfica SHA-256 a prueba de manipulaciones manuales.
-              </p>
-            </div>
-          </div>
-        </div>
-      </main>
 
-      {/* Footer */}
-      <footer className="border-t border-slate-800/60 py-4 px-6 text-center text-xs text-slate-500">
-        VaultLedger Core Platform • Java 21 LTS &bull; Spring Security 6 &bull; React 19 &bull; PostgreSQL 17
-      </footer>
+              {/* Split Area matching 1.png: Left Chart of Accounts (30%), Right Double-Entry Ledger (70%) */}
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
+                {/* Left Column: Chart of Accounts */}
+                <div className="lg:col-span-4 h-full">
+                  <ChartOfAccounts />
+                </div>
+
+                {/* Right Column: Double-Entry Transaction Ledger */}
+                <div className="lg:col-span-8 h-full">
+                  <TransactionLedger 
+                    onNewTransferClick={() => setIsTransferModalOpen(true)}
+                    externalSearch={searchQuery}
+                  />
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* TRANSACTIONS VIEW */}
+          {activeSection === 'transactions' && (
+            <div key={refreshKey} className="space-y-4">
+              <div className="flex items-center justify-between">
+                <div>
+                  <h2 className="text-xl font-bold text-slate-900 tracking-tight">
+                    Libro Diario de Partidas Dobles (General Ledger)
+                  </h2>
+                  <p className="text-xs text-slate-500 mt-0.5">
+                    Historial completo de transferencias y transacciones contables atómicas.
+                  </p>
+                </div>
+                {canPostTransaction() && (
+                  <button
+                    onClick={() => setIsTransferModalOpen(true)}
+                    className="flex items-center gap-2 px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold shadow-xs transition-all active:scale-95"
+                  >
+                    <Plus className="w-4 h-4" />
+                    <span>New Transfer</span>
+                  </button>
+                )}
+              </div>
+              <TransactionLedger 
+                onNewTransferClick={() => setIsTransferModalOpen(true)}
+                externalSearch={searchQuery}
+              />
+            </div>
+          )}
+
+          {/* ACCOUNTS VIEW */}
+          {activeSection === 'accounts' && (
+            <div key={refreshKey} className="space-y-4">
+              <div>
+                <h2 className="text-xl font-bold text-slate-900 tracking-tight">
+                  Plan General Contable y Catálogo de Cuentas
+                </h2>
+                <p className="text-xs text-slate-500 mt-0.5">
+                  Jerarquía de cuentas contables, naturaleza y balance acumulado.
+                </p>
+              </div>
+              <ChartOfAccounts />
+            </div>
+          )}
+
+          {/* AUDIT TRAIL VIEW matching 3.png */}
+          {activeSection === 'audit' && (
+            <div key={refreshKey}>
+              <AuditTrail />
+            </div>
+          )}
+
+          {/* SOLVENCY & REPORTS VIEW */}
+          {activeSection === 'solvency' && (
+            <div key={refreshKey}>
+              <SolvencyDashboard />
+            </div>
+          )}
+
+          {/* Supplementary Enterprise Banking Views */}
+          {activeSection === 'entities' && (
+            <div className="clean-card rounded-2xl bg-white border border-slate-200 p-8 text-center space-y-3">
+              <div className="w-12 h-12 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center mx-auto">
+                <Users className="w-6 h-6" />
+              </div>
+              <h3 className="font-bold text-slate-900 text-base">Institutional Entity Directory</h3>
+              <p className="text-xs text-slate-500 max-w-md mx-auto">
+                Gestión de contrapartes interbancarias, clientes corporativos y custodios institucionales regulados bajo MiFID II.
+              </p>
+            </div>
+          )}
+
+          {activeSection === 'reconciliation' && (
+            <div className="clean-card rounded-2xl bg-white border border-slate-200 p-8 text-center space-y-3">
+              <div className="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center mx-auto">
+                <CheckCircle2 className="w-6 h-6" />
+              </div>
+              <h3 className="font-bold text-slate-900 text-base">Automated Interbank Reconciliation</h3>
+              <p className="text-xs text-slate-500 max-w-md mx-auto">
+                Cotejo automático de extractos SWIFT MT940 / ISO 20022 camt.053 con coincidencia de asientos contables al 100%.
+              </p>
+            </div>
+          )}
+
+          {activeSection === 'documents' && (
+            <div className="clean-card rounded-2xl bg-white border border-slate-200 p-8 text-center space-y-3">
+              <div className="w-12 h-12 rounded-2xl bg-purple-50 text-purple-600 flex items-center justify-center mx-auto">
+                <Folder className="w-6 h-6" />
+              </div>
+              <h3 className="font-bold text-slate-900 text-base">Forensic Documentation &amp; Proofs</h3>
+              <p className="text-xs text-slate-500 max-w-md mx-auto">
+                Informes de auditoría financiera SOC 2, balances trimestrales firmados criptográficamente y certificados de solvencia.
+              </p>
+            </div>
+          )}
+
+          {activeSection === 'integrations' && (
+            <div className="clean-card rounded-2xl bg-white border border-slate-200 p-8 text-center space-y-3">
+              <div className="w-12 h-12 rounded-2xl bg-cyan-50 text-cyan-600 flex items-center justify-center mx-auto">
+                <Link2 className="w-6 h-6" />
+              </div>
+              <h3 className="font-bold text-slate-900 text-base">Core Banking &amp; API Webhooks</h3>
+              <p className="text-xs text-slate-500 max-w-md mx-auto">
+                Conexión en tiempo real con pasarelas SEPA Instant, FedNow, TARGET2 y webhooks transaccionales con firma HMAC SHA-256.
+              </p>
+            </div>
+          )}
+
+          {activeSection === 'settings' && (
+            <div className="clean-card rounded-2xl bg-white border border-slate-200 p-8 text-center space-y-3">
+              <div className="w-12 h-12 rounded-2xl bg-slate-100 text-slate-600 flex items-center justify-center mx-auto">
+                <SettingsIcon className="w-6 h-6" />
+              </div>
+              <h3 className="font-bold text-slate-900 text-base">Security &amp; System Configuration</h3>
+              <p className="text-xs text-slate-500 max-w-md mx-auto">
+                Configuración de claves asimétricas RSA-2048, rotación de tokens de refresco Redis 7 y políticas de retención inmutable.
+              </p>
+            </div>
+          )}
+        </main>
+      </div>
+
+      {/* Atomic Transfer Terminal Modal matching 2.png */}
+      <TransferModal
+        isOpen={isTransferModalOpen}
+        onClose={() => setIsTransferModalOpen(false)}
+        onSuccess={triggerRefresh}
+      />
     </div>
   );
 }
+
+export default App;
