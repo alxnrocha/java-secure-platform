@@ -156,18 +156,18 @@ export function AuditTrail() {
               a.download = `vaultledger-audit-trail-${new Date().toISOString().slice(0, 10)}.json`;
               a.click();
             }}
-            className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 text-xs font-semibold shadow-2xs transition-colors"
+            className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 text-xs font-semibold shadow-2xs cursor-pointer transition-colors"
           >
             <Download className="w-3.5 h-3.5" />
             <span>Export</span>
           </button>
 
-          <button className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 text-xs font-semibold shadow-2xs transition-colors">
+          <button className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 text-xs font-semibold shadow-2xs cursor-pointer transition-colors">
             <Filter className="w-3.5 h-3.5" />
             <span>Filters</span>
           </button>
 
-          <button className="p-2 rounded-xl bg-white border border-slate-200 hover:bg-slate-50 text-slate-400 hover:text-slate-700 transition-colors">
+          <button className="p-2 rounded-xl bg-white border border-slate-200 hover:bg-slate-50 text-slate-400 hover:text-slate-700 cursor-pointer transition-colors">
             <MoreHorizontal className="w-4 h-4" />
           </button>
         </div>
@@ -234,7 +234,7 @@ export function AuditTrail() {
           <button
             onClick={handleSimulateTamper}
             title="Simula una alteración manual en la base de datos para probar la detección criptográfica"
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-amber-300 bg-amber-50 hover:bg-amber-100 text-amber-800 text-xs font-semibold transition-colors"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-amber-300 bg-amber-50 hover:bg-amber-100 text-amber-800 text-xs font-semibold cursor-pointer transition-colors"
           >
             <Bug className="w-3.5 h-3.5" />
             <span>Simulate Tamper (Demo)</span>
@@ -244,7 +244,7 @@ export function AuditTrail() {
           <button
             onClick={handleResetData}
             title="Restaurar estado criptográfico original"
-            className="p-1.5 rounded-lg border border-slate-200 bg-white hover:bg-slate-100 text-slate-600 transition-colors"
+            className="p-1.5 rounded-lg border border-slate-200 bg-white hover:bg-slate-100 text-slate-600 cursor-pointer transition-colors"
           >
             <RotateCw className="w-3.5 h-3.5" />
           </button>
@@ -253,7 +253,7 @@ export function AuditTrail() {
           <button
             onClick={handleVerifyChain}
             disabled={verifying}
-            className="flex items-center gap-1.5 px-4 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold shadow-xs transition-all disabled:opacity-50"
+            className="flex items-center gap-1.5 px-4 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold shadow-xs cursor-pointer transition-all disabled:opacity-50"
           >
             <RotateCw className={`w-3.5 h-3.5 ${verifying ? 'animate-spin' : ''}`} />
             <span>{verifying ? 'Verificando...' : 'Verify Chain'}</span>
@@ -277,7 +277,7 @@ export function AuditTrail() {
           </div>
 
           <div className="flex items-center gap-2">
-            <button className="flex items-center gap-1.5 px-3 py-2 rounded-xl border border-slate-200 bg-slate-50 hover:bg-slate-100 text-xs font-semibold text-slate-700">
+            <button className="flex items-center gap-1.5 px-3 py-2 rounded-xl border border-slate-200 bg-slate-50 hover:bg-slate-100 text-xs font-semibold text-slate-700 cursor-pointer">
               <Calendar className="w-3.5 h-3.5 text-slate-400" />
               <span>May 12 – May 18, 2026</span>
             </button>
@@ -328,7 +328,7 @@ export function AuditTrail() {
                           <span>{eventRef}</span>
                           <button
                             onClick={(e) => copyToClipboard(eventRef, e)}
-                            className="text-slate-400 hover:text-slate-700"
+                            className="text-slate-400 hover:text-slate-700 cursor-pointer"
                           >
                             <Copy className="w-3 h-3" />
                           </button>
@@ -381,7 +381,7 @@ export function AuditTrail() {
                           </span>
                           <button
                             onClick={(e) => copyToClipboard(log.currentHash, e)}
-                            className="p-1 rounded hover:bg-slate-200/60 text-slate-400 hover:text-slate-700"
+                            className="p-1 rounded hover:bg-slate-200/60 text-slate-400 hover:text-slate-700 cursor-pointer"
                             title="Copiar Hash Completo"
                           >
                             {isCopied ? <Check className="w-3 h-3 text-emerald-600" /> : <Copy className="w-3 h-3" />}
@@ -428,7 +428,7 @@ export function AuditTrail() {
                 </div>
                 <button
                   onClick={() => setSelectedLog(null)}
-                  className="p-1.5 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100"
+                  className="p-1.5 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100 cursor-pointer"
                 >
                   <X className="w-5 h-5" />
                 </button>
@@ -461,7 +461,7 @@ export function AuditTrail() {
                   <span>{selectedLog.currentHash}</span>
                   <button
                     onClick={() => copyToClipboard(selectedLog.currentHash)}
-                    className="p-1 text-slate-400 hover:text-slate-700 ml-2"
+                    className="p-1 text-slate-400 hover:text-slate-700 ml-2 cursor-pointer"
                   >
                     <Copy className="w-3.5 h-3.5" />
                   </button>
@@ -476,7 +476,7 @@ export function AuditTrail() {
               <div className="border-b border-slate-200 flex items-center gap-4 text-xs font-semibold">
                 <button
                   onClick={() => setActiveTab('payload')}
-                  className={`pb-2 border-b-2 transition-colors ${
+                  className={`pb-2 border-b-2 cursor-pointer transition-colors ${
                     activeTab === 'payload' ? 'border-blue-600 text-blue-600' : 'border-transparent text-slate-500 hover:text-slate-800'
                   }`}
                 >
@@ -484,7 +484,7 @@ export function AuditTrail() {
                 </button>
                 <button
                   onClick={() => setActiveTab('diff')}
-                  className={`pb-2 border-b-2 transition-colors ${
+                  className={`pb-2 border-b-2 cursor-pointer transition-colors ${
                     activeTab === 'diff' ? 'border-blue-600 text-blue-600' : 'border-transparent text-slate-500 hover:text-slate-800'
                   }`}
                 >
@@ -492,7 +492,7 @@ export function AuditTrail() {
                 </button>
                 <button
                   onClick={() => setActiveTab('metadata')}
-                  className={`pb-2 border-b-2 transition-colors ${
+                  className={`pb-2 border-b-2 cursor-pointer transition-colors ${
                     activeTab === 'metadata' ? 'border-blue-600 text-blue-600' : 'border-transparent text-slate-500 hover:text-slate-800'
                   }`}
                 >
@@ -557,7 +557,7 @@ export function AuditTrail() {
                     <span className="text-slate-400 uppercase">Prev Hash:</span>
                     <div className="p-1.5 bg-white rounded border border-slate-200 text-slate-600 truncate flex items-center justify-between mt-0.5">
                       <span>{selectedLog.previousHash}</span>
-                      <button onClick={() => copyToClipboard(selectedLog.previousHash)} className="text-slate-400 hover:text-slate-700 ml-1">
+                      <button onClick={() => copyToClipboard(selectedLog.previousHash)} className="text-slate-400 hover:text-slate-700 ml-1 cursor-pointer">
                         <Copy className="w-3 h-3" />
                       </button>
                     </div>
@@ -567,7 +567,7 @@ export function AuditTrail() {
                     <span className="text-slate-400 uppercase">Current Hash:</span>
                     <div className="p-1.5 bg-emerald-50 rounded border border-emerald-200 text-emerald-800 font-bold truncate flex items-center justify-between mt-0.5">
                       <span>{selectedLog.currentHash}</span>
-                      <button onClick={() => copyToClipboard(selectedLog.currentHash)} className="text-emerald-600 hover:text-emerald-900 ml-1">
+                      <button onClick={() => copyToClipboard(selectedLog.currentHash)} className="text-emerald-600 hover:text-emerald-900 ml-1 cursor-pointer">
                         <Copy className="w-3 h-3" />
                       </button>
                     </div>
@@ -578,7 +578,7 @@ export function AuditTrail() {
                       <span className="text-slate-400 uppercase">Next Hash:</span>
                       <div className="p-1.5 bg-white rounded border border-slate-200 text-slate-600 truncate flex items-center justify-between mt-0.5">
                         <span>{nextLog.currentHash}</span>
-                        <button onClick={() => copyToClipboard(nextLog.currentHash)} className="text-slate-400 hover:text-slate-700 ml-1">
+                        <button onClick={() => copyToClipboard(nextLog.currentHash)} className="text-slate-400 hover:text-slate-700 ml-1 cursor-pointer">
                           <Copy className="w-3 h-3" />
                         </button>
                       </div>
@@ -592,7 +592,7 @@ export function AuditTrail() {
             <div className="pt-4 border-t border-slate-100 flex items-center justify-between">
               <button
                 onClick={() => setSelectedLog(null)}
-                className="px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-xs transition-colors"
+                className="px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-xs cursor-pointer transition-colors"
               >
                 Close Drawer
               </button>
@@ -606,7 +606,7 @@ export function AuditTrail() {
                   a.download = `audit-event-${selectedLog.id}.json`;
                   a.click();
                 }}
-                className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-semibold text-xs shadow-xs transition-colors"
+                className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-semibold text-xs shadow-xs cursor-pointer transition-colors"
               >
                 <Download className="w-3.5 h-3.5" />
                 <span>Export Event</span>

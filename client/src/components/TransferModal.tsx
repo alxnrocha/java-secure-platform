@@ -152,7 +152,7 @@ export function TransferModal({ isOpen, onClose, onSuccess }: TransferModalProps
 
           <button
             onClick={onClose}
-            className="p-1.5 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors"
+            className="p-1.5 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100 cursor-pointer transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
@@ -219,7 +219,7 @@ export function TransferModal({ isOpen, onClose, onSuccess }: TransferModalProps
                   value={debitAccountCode}
                   onChange={e => setDebitAccountCode(e.target.value)}
                   disabled={step === 2 || loading}
-                  className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-xs text-slate-900 font-medium focus:bg-white focus:outline-none focus:border-blue-500 appearance-none pr-8"
+                  className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-xs text-slate-900 font-medium focus:bg-white focus:outline-none focus:border-blue-500 appearance-none pr-8 cursor-pointer"
                 >
                   {accounts.map(acc => (
                     <option key={acc.id} value={acc.code}>
@@ -246,7 +246,7 @@ export function TransferModal({ isOpen, onClose, onSuccess }: TransferModalProps
                   value={creditAccountCode}
                   onChange={e => setCreditAccountCode(e.target.value)}
                   disabled={step === 2 || loading}
-                  className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-xs text-slate-900 font-medium focus:bg-white focus:outline-none focus:border-blue-500 appearance-none pr-8"
+                  className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-xs text-slate-900 font-medium focus:bg-white focus:outline-none focus:border-blue-500 appearance-none pr-8 cursor-pointer"
                 >
                   {accounts.map(acc => (
                     <option key={acc.id} value={acc.code}>
@@ -286,7 +286,7 @@ export function TransferModal({ isOpen, onClose, onSuccess }: TransferModalProps
                   className="w-full bg-transparent px-3 py-2 text-xs font-bold text-slate-900 font-mono-numbers focus:outline-none"
                   required
                 />
-                <span className="px-3 py-2.5 text-xs font-bold text-slate-600 bg-slate-100/50 border-l border-slate-200 flex items-center">
+                <span className="px-3.5 py-2.5 text-xs font-bold text-slate-600 bg-slate-100/50 border-l border-slate-200 flex items-center">
                   EUR
                 </span>
               </div>
@@ -420,7 +420,7 @@ export function TransferModal({ isOpen, onClose, onSuccess }: TransferModalProps
                   type="button"
                   onClick={() => setStep(1)}
                   disabled={loading}
-                  className="px-4 py-2.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 text-xs font-semibold"
+                  className="px-4 py-2.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 text-xs font-semibold cursor-pointer"
                 >
                   Atrás
                 </button>
@@ -430,7 +430,7 @@ export function TransferModal({ isOpen, onClose, onSuccess }: TransferModalProps
                 type="button"
                 onClick={onClose}
                 disabled={loading}
-                className="px-4 py-2.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 text-xs font-semibold"
+                className="px-4 py-2.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 text-xs font-semibold cursor-pointer"
               >
                 Cancel
               </button>
@@ -439,7 +439,7 @@ export function TransferModal({ isOpen, onClose, onSuccess }: TransferModalProps
                 <button
                   type="submit"
                   disabled={!isInvariantBalanced}
-                  className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold shadow-xs transition-all disabled:opacity-50"
+                  className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold shadow-xs transition-all cursor-pointer disabled:opacity-50"
                 >
                   <span>Review Transfer</span>
                   <ArrowRight className="w-3.5 h-3.5" />
@@ -448,7 +448,7 @@ export function TransferModal({ isOpen, onClose, onSuccess }: TransferModalProps
                 <button
                   type="submit"
                   disabled={loading || !isInvariantBalanced}
-                  className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold shadow-md transition-all disabled:opacity-50 active:scale-95"
+                  className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold shadow-md transition-all cursor-pointer disabled:opacity-50 active:scale-95"
                 >
                   <Fingerprint className="w-4 h-4 text-emerald-400" />
                   <div>

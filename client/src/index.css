@@ -13,6 +13,26 @@
     overflow-x: hidden;
     -webkit-font-smoothing: antialiased;
   }
+
+  /* Universal Interactive Pointer Reset */
+  button,
+  select,
+  a,
+  summary,
+  [role="button"],
+  input[type="button"],
+  input[type="submit"],
+  input[type="reset"],
+  input[type="checkbox"],
+  input[type="radio"] {
+    cursor: pointer;
+  }
+
+  button:disabled,
+  select:disabled,
+  input:disabled {
+    cursor: not-allowed;
+  }
 }
 
 /* Custom Scrollbar for High-Density Financial Ledger */

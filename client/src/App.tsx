@@ -116,7 +116,7 @@ export function App() {
                 {canPostTransaction() && (
                   <button
                     onClick={() => setIsTransferModalOpen(true)}
-                    className="flex items-center gap-2 px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold shadow-xs transition-all active:scale-95"
+                    className="flex items-center gap-2 px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold shadow-xs cursor-pointer transition-all active:scale-95"
                   >
                     <Plus className="w-4 h-4" />
                     <span>New Transfer</span>

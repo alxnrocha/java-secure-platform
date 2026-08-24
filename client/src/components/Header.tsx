@@ -93,14 +93,14 @@ export function Header({ onSearchChange, onRefreshData }: HeaderProps) {
         <button
           onClick={handleResetData}
           title="Restablecer Datos Iniciales"
-          className="p-2 rounded-lg text-slate-500 hover:text-slate-900 hover:bg-slate-100 border border-transparent hover:border-slate-200 transition-colors"
+          className="p-2 rounded-lg text-slate-500 hover:text-slate-900 hover:bg-slate-100 border border-transparent hover:border-slate-200 cursor-pointer transition-colors"
         >
           <RotateCcw className="w-4 h-4" />
         </button>
 
         {/* Notification Bell with Badge 3 */}
         <div className="relative">
-          <button className="p-2 rounded-lg text-slate-500 hover:text-slate-900 hover:bg-slate-100 transition-colors">
+          <button className="p-2 rounded-lg text-slate-500 hover:text-slate-900 hover:bg-slate-100 cursor-pointer transition-colors">
             <Bell className="w-4 h-4" />
           </button>
           <span className="absolute top-1 right-1 w-4 h-4 rounded-full bg-rose-500 text-white text-[9px] font-bold flex items-center justify-center">
@@ -112,7 +112,7 @@ export function Header({ onSearchChange, onRefreshData }: HeaderProps) {
         <div className="relative">
           <button
             onClick={() => setRoleDropdownOpen(!roleDropdownOpen)}
-            className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-50 hover:bg-slate-100 border border-slate-200 text-xs font-semibold text-slate-700 transition-colors"
+            className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-50 hover:bg-slate-100 border border-slate-200 text-xs font-semibold text-slate-700 cursor-pointer transition-colors"
           >
             <span>
               Role: {currentUser.role === 'ROLE_ADMIN' ? 'Admin / Auditor' : currentUser.role.replace('ROLE_', '')}
@@ -130,7 +130,7 @@ export function Header({ onSearchChange, onRefreshData }: HeaderProps) {
                   <button
                     key={r.role}
                     onClick={() => handleSelectRole(r.role)}
-                    className={`w-full flex items-start gap-2.5 p-2 rounded-lg text-left text-xs transition-colors ${
+                    className={`w-full flex items-start gap-2.5 p-2 rounded-lg text-left text-xs cursor-pointer transition-colors ${
                       currentUser.role === r.role
                         ? 'bg-blue-50 text-blue-900 border border-blue-200'
                         : 'hover:bg-slate-50 text-slate-700'

@@ -206,13 +206,13 @@ export function ChartOfAccounts({ onAccountSelect }: ChartOfAccountsProps) {
         <div className="flex items-center gap-1">
           <button 
             onClick={() => setShowSearch(!showSearch)}
-            className="p-1.5 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors"
+            className="p-1.5 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100 cursor-pointer transition-colors"
             title="Search accounts"
           >
             <Search className="w-4 h-4" />
           </button>
           <button 
-            className="p-1.5 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors"
+            className="p-1.5 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100 cursor-pointer transition-colors"
             title="Filter accounts"
           >
             <Filter className="w-4 h-4" />
@@ -220,13 +220,13 @@ export function ChartOfAccounts({ onAccountSelect }: ChartOfAccountsProps) {
           {canCreateAccount() && (
             <button 
               onClick={() => setIsModalOpen(true)}
-              className="p-1.5 rounded-lg text-blue-600 hover:bg-blue-50 transition-colors"
+              className="p-1.5 rounded-lg text-blue-600 hover:bg-blue-50 cursor-pointer transition-colors"
               title="Add account"
             >
               <Plus className="w-4 h-4" />
             </button>
           )}
-          <button className="p-1.5 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors">
+          <button className="p-1.5 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100 cursor-pointer transition-colors">
             <MoreHorizontal className="w-4 h-4" />
           </button>
         </div>
@@ -279,7 +279,7 @@ export function ChartOfAccounts({ onAccountSelect }: ChartOfAccountsProps) {
               </h3>
               <button 
                 onClick={() => setIsModalOpen(false)}
-                className="text-slate-400 hover:text-slate-700 text-sm"
+                className="text-slate-400 hover:text-slate-700 text-sm cursor-pointer"
               >
                 ✕
               </button>
@@ -329,7 +329,7 @@ export function ChartOfAccounts({ onAccountSelect }: ChartOfAccountsProps) {
                 <select
                   value={formType}
                   onChange={e => setFormType(e.target.value as AccountType)}
-                  className="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-slate-900 focus:bg-white focus:outline-none focus:border-blue-500"
+                  className="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-slate-900 cursor-pointer focus:bg-white focus:outline-none focus:border-blue-500"
                 >
                   <option value="ASSET">ACTIVO (1xxx) — Saldo normal Deudor</option>
                   <option value="LIABILITY">PASIVO (2xxx) — Saldo normal Acreedor</option>
@@ -344,7 +344,7 @@ export function ChartOfAccounts({ onAccountSelect }: ChartOfAccountsProps) {
                 <select
                   value={formParentId}
                   onChange={e => setFormParentId(e.target.value)}
-                  className="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-slate-900 focus:bg-white focus:outline-none focus:border-blue-500"
+                  className="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-slate-900 cursor-pointer focus:bg-white focus:outline-none focus:border-blue-500"
                 >
                   <option value="">-- Ninguna (Cuenta Raíz) --</option>
                   {accounts.map(acc => (
@@ -359,13 +359,13 @@ export function ChartOfAccounts({ onAccountSelect }: ChartOfAccountsProps) {
                 <button
                   type="button"
                   onClick={() => setIsModalOpen(false)}
-                  className="px-4 py-2 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold"
+                  className="px-4 py-2 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold cursor-pointer"
                 >
                   Cancelar
                 </button>
                 <button
                   type="submit"
-                  className="px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold shadow-xs"
+                  className="px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold shadow-xs cursor-pointer"
                 >
                   Guardar Cuenta
                 </button>
