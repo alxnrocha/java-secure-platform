@@ -7,10 +7,11 @@
   }
 
   body {
-    background-color: #080C14;
-    color: #F1F5F9;
+    background-color: #F8FAFC;
+    color: #0F172A;
     font-family: var(--font-sans);
     overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
   }
 }
 
@@ -21,16 +22,16 @@
 }
 
 ::-webkit-scrollbar-track {
-  background: #0B0F19;
+  background: #F1F5F9;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #1E293B;
+  background: #CBD5E1;
   border-radius: 9999px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #334155;
+  background: #94A3B8;
 }
 
 /* Monospace font utility for account numbers and financial balances */
@@ -39,20 +40,18 @@
   font-feature-settings: "tnum" 1;
 }
 
-/* Glassmorphism Surface for Dark Fintech */
-.glass-panel {
-  background: rgba(13, 18, 30, 0.75);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.06);
+/* Crisp Clean Light Card Surface */
+.clean-card {
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05), 0 1px 2px -1px rgba(0, 0, 0, 0.05);
 }
 
-.glass-panel-hover {
+.clean-card-hover {
   transition: all 0.2s ease-in-out;
 }
 
-.glass-panel-hover:hover {
-  background: rgba(18, 26, 43, 0.85);
-  border-color: rgba(16, 185, 129, 0.25);
-  box-shadow: 0 4px 20px -2px rgba(16, 185, 129, 0.08);
+.clean-card-hover:hover {
+  border-color: #CBD5E1;
+  box-shadow: 0 4px 12px -2px rgba(0, 0, 0, 0.08);
 }

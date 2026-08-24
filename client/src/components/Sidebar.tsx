@@ -1,14 +1,21 @@
+import { useState } from 'react';
 import { 
   LayoutDashboard, 
-  Layers, 
   ArrowLeftRight, 
-  FileCheck, 
-  PieChart,
-  Lock
+  Landmark, 
+  ShieldCheck, 
+  BarChart3, 
+  Users, 
+  CheckCircle2, 
+  Folder, 
+  Link2, 
+  Settings, 
+  ChevronLeft, 
+  ChevronRight
 } from 'lucide-react';
 import { useAuthStore } from '../stores/authStore';
 
-export type NavSection = 'overview' | 'accounts' | 'ledger' | 'audit' | 'solvency';
+export type NavSection = 'dashboard' | 'transactions' | 'accounts' | 'audit' | 'solvency' | 'entities' | 'reconciliation' | 'documents' | 'integrations' | 'settings';
 
 interface SidebarProps {
   activeSection: NavSection;
@@ -17,125 +24,119 @@ interface SidebarProps {
 
 export function Sidebar({ activeSection, onSelectSection }: SidebarProps) {
   const { canCreateAccount, canPostTransaction, canViewAuditLogs } = useAuthStore();
+  const [collapsed, setCollapsed] = useState(false);
 
   const navItems: {
     id: NavSection;
     label: string;
-    description: string;
     icon: typeof LayoutDashboard;
+    permission?: boolean;
     badge?: string;
-    locked?: boolean;
-    lockMsg?: string;
   }[] = [
-    {
-      id: 'overview',
-      label: 'Visión General',
-      description: 'Métricas, KPIs y estado del sistema',
-      icon: LayoutDashboard,
-    },
-    {
-      id: 'accounts',
-      label: 'Plan de Cuentas',
-      description: 'Jerarquía contable y balances de naturaleza',
-      icon: Layers,
-      badge: canCreateAccount() ? 'Admin' : undefined,
-    },
-    {
-      id: 'ledger',
-      label: 'Libro Mayor & Transferencias',
-      description: 'Motor de doble partida y estornos',
-      icon: ArrowLeftRight,
-      badge: canPostTransaction() ? 'Operador' : undefined,
-    },
-    {
-      id: 'audit',
-      label: 'Auditoría Forense SHA-256',
-      description: 'Pista criptográfica y detector de manipulaciones',
-      icon: FileCheck,
-      badge: canViewAuditLogs() ? 'Auditor' : undefined,
-      locked: !canViewAuditLogs(),
-      lockMsg: 'Requiere rol Auditor, Cumplimiento o Admin',
-    },
-    {
-      id: 'solvency',
-      label: 'Solvencia & Ratios',
-      description: 'Ratios de apalancamiento y balance general',
-      icon: PieChart,
-    },
+    { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
+    { id: 'transactions', label: 'Transactions', icon: ArrowLeftRight, permission: canPostTransaction(), badge: 'Live' },
+    { id: 'accounts', label: 'Accounts', icon: Landmark, permission: canCreateAccount() },
+    { id: 'audit', label: 'Audit Trail', icon: ShieldCheck, permission: canViewAuditLogs(), badge: '100%' },
+    { id: 'solvency', label: 'Reports & Solvency', icon: BarChart3 },
+    { id: 'entities', label: 'Entities', icon: Users },
+    { id: 'reconciliation', label: 'Reconciliation', icon: CheckCircle2 },
+    { id: 'documents', label: 'Documents', icon: Folder },
+    { id: 'integrations', label: 'Integrations', icon: Link2 },
+    { id: 'settings', label: 'Settings', icon: Settings },
   ];
 
   return (
-    <aside className="w-64 border-r border-slate-800/80 bg-[#0B0F19]/60 p-4 flex flex-col justify-between shrink-0">
-      <div className="space-y-1">
-        <div className="px-3 py-2 text-[11px] font-mono uppercase tracking-wider text-slate-400 font-semibold">
-          Módulos de Plataforma
-        </div>
+    <aside 
+      className={`bg-white border-r border-slate-200 transition-all duration-300 flex flex-col justify-between select-none ${
+        collapsed ? 'w-16' : 'w-64'
+      }`}
+    >
+      {/* Navigation Links */}
+      <div className="p-3 space-y-1">
+        {navItems.map(item => {
+          const isActive = activeSection === item.id;
+          const Icon = item.icon;
 
-        <nav className="space-y-1">
-          {navItems.map(item => {
-            const isActive = activeSection === item.id;
-            const Icon = item.icon;
+          return (
+            <button
+              key={item.id}
+              onClick={() => onSelectSection(item.id)}
+              className={`w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs font-semibold transition-all ${
+                isActive
+                  ? 'bg-blue-50 text-blue-700 border border-blue-200/80 shadow-xs'
+                  : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50 border border-transparent'
+              }`}
+              title={collapsed ? item.label : undefined}
+            >
+              <div className="flex items-center gap-3 min-w-0">
+                <Icon className={`w-4 h-4 shrink-0 ${isActive ? 'text-blue-600' : 'text-slate-400'}`} />
+                {!collapsed && <span className="truncate">{item.label}</span>}
+              </div>
 
-            return (
-              <button
-                key={item.id}
-                onClick={() => {
-                  if (!item.locked) {
-                    onSelectSection(item.id);
-                  }
-                }}
-                disabled={item.locked}
-                title={item.locked ? item.lockMsg : undefined}
-                className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-left transition-all group ${
-                  isActive
-                    ? 'bg-slate-800/90 text-white border border-slate-700/80 shadow-[0_2px_12px_rgba(0,0,0,0.3)]'
-                    : item.locked
-                    ? 'opacity-40 cursor-not-allowed text-slate-500 hover:bg-transparent'
-                    : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/40'
-                }`}
-              >
-                <div className="flex items-center gap-3 min-w-0">
-                  <div
-                    className={`p-1.5 rounded-lg transition-colors ${
-                      isActive
-                        ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30'
-                        : 'text-slate-400 group-hover:text-slate-300'
-                    }`}
-                  >
-                    <Icon className="w-4 h-4" />
-                  </div>
-                  <div className="truncate">
-                    <p className={`text-xs font-medium ${isActive ? 'text-white' : 'text-slate-300'}`}>
-                      {item.label}
-                    </p>
-                    <p className="text-[10px] text-slate-400 truncate">{item.description}</p>
-                  </div>
-                </div>
-
-                {item.locked ? (
-                  <Lock className="w-3.5 h-3.5 text-slate-600 shrink-0" />
-                ) : item.badge ? (
-                  <span className="text-[9px] font-mono uppercase px-1.5 py-0.5 rounded bg-slate-900 border border-slate-700 text-slate-400 shrink-0">
-                    {item.badge}
-                  </span>
-                ) : null}
-              </button>
-            );
-          })}
-        </nav>
+              {!collapsed && item.badge && (
+                <span className={`text-[10px] font-mono font-bold px-1.5 py-0.2 rounded ${
+                  isActive ? 'bg-blue-100 text-blue-800' : 'bg-slate-100 text-slate-500'
+                }`}>
+                  {item.badge}
+                </span>
+              )}
+            </button>
+          );
+        })}
       </div>
 
-      {/* System Invariant Card in Sidebar Footer */}
-      <div className="glass-panel p-3.5 rounded-xl border border-slate-800/80 space-y-2 mt-4">
-        <div className="flex items-center justify-between text-xs">
-          <span className="font-mono text-slate-400">Ledger Engine</span>
-          <span className="font-mono text-emerald-400 text-[10px] font-semibold bg-emerald-950/80 px-1.5 py-0.5 rounded border border-emerald-800/60">
-            ONLINE
-          </span>
-        </div>
-        <div className="text-[11px] text-slate-400 leading-relaxed font-mono">
-          Aislamiento Serializable con Bloqueo Pesimista Anticolisión.
-        </div>
+      {/* Bottom Compliance & System Status Box matching 1.png / 3.png */}
+      <div className="p-3 space-y-3 border-t border-slate-200 bg-slate-50/50">
+        {!collapsed && (
+          <div className="p-3 rounded-xl bg-white border border-slate-200 space-y-2.5 shadow-2xs">
+            <div className="flex items-center justify-between">
+              <span className="text-[11px] font-bold text-slate-700">Compliance</span>
+              <span className="text-[9px] font-mono font-bold px-1.5 py-0.2 rounded bg-emerald-50 text-emerald-700 border border-emerald-200 uppercase">
+                COMPLIANT
+              </span>
+            </div>
+
+            <div className="space-y-1 text-[10px] text-slate-500 font-mono">
+              <div className="flex items-center justify-between">
+                <span>SOC 2 Type II</span>
+                <span className="text-emerald-600 font-bold">✓</span>
+              </div>
+              <div className="flex items-center justify-between">
+                <span>PCI DSS v4.0</span>
+                <span className="text-emerald-600 font-bold">✓</span>
+              </div>
+              <div className="flex items-center justify-between">
+                <span>ISO 27001</span>
+                <span className="text-emerald-600 font-bold">✓</span>
+              </div>
+              <div className="flex items-center justify-between">
+                <span>GDPR</span>
+                <span className="text-emerald-600 font-bold">✓</span>
+              </div>
+            </div>
+
+            <div className="pt-2 border-t border-slate-100 flex items-center justify-between text-[10px] text-slate-500">
+              <div className="flex items-center gap-1.5">
+                <span className="w-2 h-2 rounded-full bg-emerald-500" />
+                <span className="font-sans font-medium text-slate-600">Operational</span>
+              </div>
+              <span className="font-mono text-[9px] text-slate-400">v2.4.1</span>
+            </div>
+          </div>
+        )}
+
+        {/* Collapse toggle */}
+        <button
+          onClick={() => setCollapsed(!collapsed)}
+          className="w-full flex items-center justify-center gap-2 p-1.5 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors text-xs font-semibold"
+        >
+          {collapsed ? <ChevronRight className="w-4 h-4" /> : (
+            <>
+              <ChevronLeft className="w-4 h-4" />
+              <span>Collapse Sidebar</span>
+            </>
+          )}
+        </button>
       </div>
     </aside>
   );
