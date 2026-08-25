@@ -138,3 +138,53 @@ export interface FinancialMetrics {
   balanceSheetBalanced: boolean;
   calculatedAt: string;
 }
+
+export type ReconciliationMatchStatus = 'MATCHED' | 'PENDING' | 'VARIANCE';
+
+export interface BankStatementFeed {
+  id: string;
+  bankReference: string;
+  externalNetwork: 'SWIFT_GPI' | 'SEPA_INSTANT' | 'TARGET2' | 'FEDNOW';
+  counterpartyName: string;
+  counterpartyIban: string;
+  amount: number;
+  direction: 'INBOUND' | 'OUTBOUND';
+  currency: string;
+  valueDate: string;
+  matchStatus: ReconciliationMatchStatus;
+  confidenceScore: number;
+  matchedTransactionId?: string | null;
+  matchedTransactionRef?: string | null;
+  varianceAmount?: number;
+  reconciledAt?: string | null;
+}
+
+export interface ReconciliationSummary {
+  totalFeedsCount: number;
+  totalVolume: number;
+  matchedCount: number;
+  matchedVolume: number;
+  pendingCount: number;
+  pendingVolume: number;
+  matchRatePercentage: number;
+}
+
+export type FinancialReportType = 
+  | 'TRIAL_BALANCE' 
+  | 'INCOME_STATEMENT' 
+  | 'AUDIT_CERTIFICATE' 
+  | 'BASEL3_DOSSIER';
+
+export interface FinancialReportMetadata {
+  id: string;
+  type: FinancialReportType;
+  title: string;
+  description: string;
+  generatedAt: string;
+  period: string;
+  currency: string;
+  format: 'PDF' | 'CSV' | 'JSON';
+  sha256VerificationHash: string;
+  data: any;
+}
+

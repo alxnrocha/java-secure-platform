@@ -6,8 +6,6 @@ import {
   TrendingUp, 
   Plus, 
   Users, 
-  CheckCircle2, 
-  Folder, 
   Link2, 
   Settings as SettingsIcon
 } from 'lucide-react';
@@ -18,6 +16,8 @@ import { ChartOfAccounts } from './components/ChartOfAccounts';
 import { TransactionLedger } from './components/TransactionLedger';
 import { AuditTrail } from './components/AuditTrail';
 import { SolvencyDashboard } from './components/SolvencyDashboard';
+import { ReconciliationView } from './components/ReconciliationView';
+import { DocumentsView } from './components/DocumentsView';
 import { TransferModal } from './components/TransferModal';
 import { useAuthStore } from './stores/authStore';
 
@@ -172,27 +172,17 @@ export function App() {
             </div>
           )}
 
+          {/* AUTOMATED BANK RECONCILIATION VIEW */}
           {activeSection === 'reconciliation' && (
-            <div className="clean-card rounded-2xl bg-white border border-slate-200 p-8 text-center space-y-3">
-              <div className="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center mx-auto">
-                <CheckCircle2 className="w-6 h-6" />
-              </div>
-              <h3 className="font-bold text-slate-900 text-base">Automated Interbank Reconciliation</h3>
-              <p className="text-xs text-slate-500 max-w-md mx-auto">
-                Cotejo automático de extractos SWIFT MT940 / ISO 20022 camt.053 con coincidencia de asientos contables al 100%.
-              </p>
+            <div key={refreshKey}>
+              <ReconciliationView />
             </div>
           )}
 
+          {/* FINANCIAL DOCUMENTS & AUDIT CERTIFICATES VIEW */}
           {activeSection === 'documents' && (
-            <div className="clean-card rounded-2xl bg-white border border-slate-200 p-8 text-center space-y-3">
-              <div className="w-12 h-12 rounded-2xl bg-purple-50 text-purple-600 flex items-center justify-center mx-auto">
-                <Folder className="w-6 h-6" />
-              </div>
-              <h3 className="font-bold text-slate-900 text-base">Forensic Documentation &amp; Proofs</h3>
-              <p className="text-xs text-slate-500 max-w-md mx-auto">
-                Informes de auditoría financiera SOC 2, balances trimestrales firmados criptográficamente y certificados de solvencia.
-              </p>
+            <div key={refreshKey}>
+              <DocumentsView />
             </div>
           )}
 
